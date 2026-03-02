@@ -1,0 +1,20 @@
+﻿python : Traceback (most recent call last):
+At line:1 char:1
++ python main.py 2>&1 | Out-File -FilePath output_log.txt -Encoding utf ...
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\Tejas\OneDrive\Desktop\DAA_model\AIRDA_Model\main.py", line 533, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\Tejas\OneDrive\Desktop\DAA_model\AIRDA_Model\main.py", line 420, in main
+    print_banner()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\Tejas\OneDrive\Desktop\DAA_model\AIRDA_Model\main.py", line 43, in print_banner
+    print("\u2554" + "\u2550"*68 + "\u2557")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-69: character maps to <undefined>
