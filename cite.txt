@@ -1,0 +1,3 @@
+[1] Derakhshanfard, N., Hosseinzadeh, L., Jafari, F. R. & Ghaffari, A. Intelligent resource allocation in internet of things using random forest and clustering techniques. Sci. Rep. 15(1), 30522 (2025).
+
+[2] B. Nethravathi, “An AI-Augmented Kernel for Dynamic Resource Utilization in Virtualized Environments”, Eng. Technol. Appl. Sci. Res., vol. 15, no. 5, pp. 26959–26964, Oct. 2025.
