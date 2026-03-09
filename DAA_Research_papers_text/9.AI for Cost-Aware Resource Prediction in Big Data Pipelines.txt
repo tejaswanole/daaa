@@ -1,0 +1,484 @@
+Artificial Intelligence for Cost-Aware Resource
+Prediction in Big Data Pipelines
+Harshit Goyal
+1 BITS Pilani, India
+2023ac05905@wilp.bits-pilani.ac.in
+2 harshit.goyal.in@gmail.com
+Abstract. Efficient resource allocation is a key challenge in modern
+cloud computing. Over-provisioning leads to unnecessary costs, while
+under-provisioning risks performance degradation and SLA violations.
+This work presents an artificial intelligence approach to predict resource
+utilization in big data pipelines using Random Forest regression. We
+preprocess the Google Borg cluster traces to clean, transform, and extract
+relevant features (CPU, memory, usage distributions). The model achieves
+high predictive accuracy (R2 ≈0.99, MAE ≈0.0048, RMSE ≈0.137),
+capturing non-linear relationships between workload characteristics and
+resource utilization. Error analysis reveals impressive performance on
+small-to-medium jobs, with higher variance in rare large-scale jobs. These
+results demonstrate the potential of AI-driven prediction for cost-aware
+autoscaling in cloud environments, reducing unnecessary provisioning
+while safeguarding service quality.
+Keywords: Artificial Intelligence · Cloud Computing · Resource Pre-
+diction · Random Forests · Cost-Aware Autoscaling.
+1
+Introduction
+The growth of big data pipelines has intensified demand for efficient cloud
+resource management. Static heuristics and reactive scaling methods often lead to
+inefficiencies: over-provisioning wastes computational resources and increases cost,
+while under-provisioning risks service degradation and SLA violations. In this
+context, artificial intelligence (AI) offers an opportunity to move from reactive
+management to proactive, cost-aware decision-making.
+This paper explores the application of AI-driven machine learning techniques,
+specifically Random Forest regression, for predicting resource utilization in big
+data pipelines. By accurately forecasting CPU utilization, cloud systems can make
+informed scaling decisions, balancing cost savings with performance guarantees.
+Big data pipelines execute at cloud scale, where resource allocation decisions
+directly influence both performance and cost. Traditional strategies often rely on
+static rules or reactive scaling, adjusting resources only after demand has already
+changed. Such approaches lead to two common inefficiencies: over-provisioning,
+which wastes computational capacity and inflates costs, and under-provisioning,
+which degrades throughput and increases the risk of SLA violations.
+arXiv:2510.05127v1  [cs.DC]  30 Sep 2025
+2
+Harshit Goyal, BITS Pilani
+Artificial intelligence (AI) offers an alternative by enabling proactive, data-
+driven decision making. By learning patterns from historical traces, AI models
+can anticipate future demand and support resource allocation policies that
+are both efficient and reliable. Among the different approaches, ensemble tree-
+based methods such as Random Forests strike a balance between robustness,
+interpretability, and accuracy, making them suitable for cloud environments
+where workload heterogeneity and noisy measurements are the norm.
+In this work, we investigate an AI-driven framework for cost-aware resource
+prediction in big data pipelines. Using Google Borg traces as a case study, we
+design a preprocessing pipeline to transform semi-structured logs into compact,
+numeric features and train a Random Forest regressor to forecast utilization.
+The evaluation demonstrates high predictive accuracy and reveals how imbalance
+in workload distributions affects model performance across job scales. We also
+outline how the model can be integrated into existing scheduling and autoscaling
+systems, highlighting its potential to reduce costs while preserving reliability.
+Our contributions are:
+1. A comprehensive preprocessing pipeline to transform semi-structured Borg
+trace logs into compact, numeric features suitable for machine learning.
+2. A cost-aware predictive framework using Random Forest regression to capture
+workload–resource relationships.
+3. Empirical evaluation showing high accuracy (R2 > 0.99) and insights into
+workload imbalance effects on predictive performance.
+2
+Related Work
+The Large-scale cluster traces such as Google Borg, 2011 have been widely
+studied to understand workload behavior and resource allocation. Early work
+applied statistical models and linear regression to predict job demands, but these
+approaches struggled with heterogeneity and skewed distributions.
+Recent studies introduced neural networks and reinforcement learning for
+autoscaling, but these often require heavy tuning and lack interpretability. In
+contrast, Random Forests, breiman2001 are robust to noise, capture non-linear
+interactions, and offer feature importance measures that help explain predictions.
+Beyond early work on cluster traces and statistical demand models, recent
+research has increasingly explored machine learning and deep learning approaches
+for cloud resource management. Mao and Humphrey [1] survey a wide range
+of ML-based techniques for cloud resource allocation, noting that prediction
+accuracy directly impacts both performance and cost efficiency. Xu et al. [2]
+introduced reinforcement learning methods that adapt autoscaling decisions in
+real time, but these often require extensive training data and computational
+overhead that limit their adoption in production clusters.
+Neural architectures have also been applied to demand forecasting. Zhang
+et al. [3] evaluated deep recurrent models for workload prediction, demonstrat-
+ing gains in accuracy but raising concerns about interpretability and training
+AI for Cost-Aware Resource Prediction
+3
+complexity. Other studies, such as Ali-Eldin et al. [4], emphasized cost-aware au-
+toscaling policies, showing that combining predictive methods with optimization
+frameworks can significantly reduce operating expenses in cloud environments.
+While deep learning methods show promise, tree-based models remain attrac-
+tive due to their robustness to noise, ability to capture non-linear interactions,
+and provision of feature importance measures that aid interpretability. Recent
+evaluations [5,6] confirm that ensemble approaches like Random Forests and
+Gradient Boosted Trees perform competitively against more complex neural
+models in many resource prediction tasks, particularly when training data is
+imbalanced or heterogeneous.
+Our work extends this line by applying Random Forest regression to big
+data pipeline workloads, explicitly highlighting the cost-awareness dimension of
+prediction. By focusing not only on accuracy but also on the implications for
+autoscaling and SLA compliance, we position AI-driven forecasting as a practical
+tool for cloud operators rather than a purely theoretical exercise.
+space aselineskip
+3
+Dataset and Preprocessing
+We use a subset of the Google Borg traces comprising ~5,000 jobs. The raw
+dataset contains structured metadata and semi-structured logs, which require
+extensive cleaning and transformation.
+We evaluate our approach using a subset of the publicly released Google Borg
+traces, which capture large-scale cluster activity over multiple days. Each trace
+includes job-level metadata, resource requests, and sampled usage distributions,
+making it a valuable benchmark for studying cloud workload behavior. The raw
+data is semi-structured and high-dimensional, with more than forty columns,
+some of which contain nested lists or distributional summaries. Such complexity
+necessitates a careful preprocessing pipeline to produce a compact, machine-
+learning–ready representation.
+3.1 Data characteristics. The subset used in this study contains approxi-
+mately 5,000 jobs, spanning a diverse mix of small, medium, and large resource
+requests. The heterogeneity of workloads is evident: while the majority of jobs
+request fewer than 5 CPUs, a minority of jobs request significantly larger al-
+locations, introducing imbalance in the data. In addition, the traces include
+categorical metadata (e.g., user, collection name), continuous numerical fields,
+and semi-structured arrays such as sampled CPU usage distributions.
+3.2 Preprocessing pipeline. To prepare the dataset, we performed the
+following transformations:
+– Column reduction - Non-essential metadata fields such as Unnamed:0, time,
+machine_id, constraint, user, collection_name, collection_logical_name, and
+start_after_collection were dropped to reduce noise and dimensionality.
+– Resource request parsing - The resource_request field was split into two
+dedicated columns, resource_request_cpus and resource_request_memory,
+providing direct numeric inputs.
+4
+Harshit Goyal, BITS Pilani
+– Usage decomposition. Columns reporting aggregated usage statistics (aver-
+age_usage, maximum_usage, random_sample_usage) were decomposed into
+separate CPU and memory subfields, ensuring feature granularity.
+– Distribution summarization - Array-based features (cpu_usage_distribution,
+tail_cpu_usage_distribution) were converted into compact summary statis-
+tics (mean, standard deviation, minimum, maximum, and quartiles) to pre-
+serve information while avoiding dimensional explosion.
+– Categorical handling - Low-cardinality categorical fields were frequency-
+encoded, while high-cardinality identifiers were discarded to prevent sparse
+one-hot encodings from overwhelming the feature space.
+– Missing values - Null entries were coerced to zeros or safe defaults after type
+normalization.
+To better understand feature relationships, we computed a correlation heatmap
+of all numeric attributes after preprocessing (Figure 1). The visualization high-
+lights strong correlations among CPU and memory usage statistics, while other
+fields remain largely independent. This analysis guided feature reduction by
+removing redundant variables, ensuring a compact representation without signifi-
+cant loss of information.
+Figure 1. Correlation heatmap of numeric features after preprocessing.
+3.3 Final dataset. After preprocessing, the dataset contained approximately
+25 numeric features, striking a balance between expressiveness and compact-
+AI for Cost-Aware Resource Prediction
+5
+ness. This representation captures both the requested and observed behavior of
+workloads while remaining tractable for training ensemble models.
+Steps:
+– Dropped metadata fields: Unnamed:0, time, machine_id, constraint, user,
+collection_name, collection_logical_name, start_after_collection.
+– Parsed resource_request into CPU and memory fields.
+– Decomposed usage columns (average_usage, maximum_usage, random_sample_usage)
+into CPU and memory subfields.
+– Summarized distribution fields (cpu_usage_distribution, tail_cpu_usage_distribution)
+into compact statistics (mean, std, min, max, quartiles).
+– Frequency-encoded low-cardinality categorical fields; dropped high-cardinality
+identifiers.
+– Filled missing values with zero after type coercion.
+The final dataset contained ~25 numeric features, providing a compact yet
+expressive representation of workload behavior.
+4
+Methodology
+The goal of the methodology is to develop a predictive framework that is both
+accurate and practical for deployment in cloud environments. To achieve this,
+we designed an experimental pipeline consisting of model selection, feature
+engineering, hyperparameter tuning, and evaluation.
+4.1 Model Choice We chose the Random Forest Regressor as the core predictive
+model. Random Forests are ensemble methods that combine multiple decision
+trees trained on bootstrapped samples of the data with randomized feature
+splits [1]. This design confers several advantages: robustness to noise, ability to
+capture non-linear interactions, and natural handling of mixed feature types.
+Unlike deep neural models, which often require large-scale datasets and extensive
+hyperparameter tuning, Random Forests perform strongly on medium-sized
+datasets such as the Borg traces while maintaining interpretability through
+feature importance scores.
+We also compared Random Forests against simple baselines such as Linear
+Regression, which struggles to capture non-linear workload–resource relationships,
+and Gradient Boosted Trees, which can offer competitive accuracy but require
+more careful tuning. Our results highlight that Random Forests provide the best
+balance of accuracy, stability, and computational cost for this dataset.
+4.2 Feature Selection Given that the preprocessed dataset contains ~25
+numeric features, not all of which are equally informative, we employed model-
+based feature selection. Initial feature importances were computed using Random
+Forests trained on the full feature set. The top 25 features were retained, as they
+explained the majority of variance while avoiding unnecessary dimensionality. This
+6
+Harshit Goyal, BITS Pilani
+step ensures that the model focuses on workload characteristics most correlated
+with utilization, such as requested CPUs, average CPU usage, and maximum
+memory usage.
+4.3 Hyperparameter Tuning Random Forests have several tunable pa-
+rameters that directly influence performance, including the number of trees
+(n_estimators), maximum tree depth (max_depth), and minimum samples per
+split/leaf (min_samples_split, min_samples_leaf). Instead of exhaustive grid
+search, which is computationally prohibitive on even medium-sized datasets, we
+used RandomizedSearchCV with 20 sampled parameter sets and 3-fold cross-
+validation. This strikes a balance between search efficiency and thoroughness.
+The best configuration identified was:
+– n_estimators = 100
+– max_depth = 20
+– min_samples_split = 10
+– min_samples_leaf = 1
+This configuration balances generalization with model complexity, avoiding
+overfitting while capturing non-linear trends in workload behavior.
+4.4 Evaluation Metrics To assess predictive performance, we employed three
+widely used regression metrics:
+– Mean Absolute Error (MAE): measures average absolute deviation between
+predicted and actual utilization.
+– Root Mean Squared Error (RMSE): penalizes larger deviations more heavily,
+highlighting errors on large jobs.
+– Coefficient of Determination (R2): measures explained variance, indicating
+overall model fit.
+Together, these metrics provide a comprehensive view: MAE captures accuracy
+on common workloads, RMSE highlights rare outliers, and R2 quantifies global
+fit.
+4.5 Diagnostic Tools To supplement quantitative metrics, we employed several
+diagnostic tools:
+– Parity plots to visualize the alignment between predictions and ground truth.
+– Residual analysis to assess systematic biases and variance across workload
+sizes.
+– Error-by-bin breakdown to quantify model performance across ranges of
+requested CPUs and memory.
+These tools provide qualitative insights into where the model succeeds and
+where improvements are needed, particularly for rare, high-utilization jobs.
+AI for Cost-Aware Resource Prediction
+7
+5
+Results
+5.1 Overall Metrics The Random Forest regressor achieved strong predictive
+accuracy on the Borg subset, with an MAE of 0.0048, RMSE of 0.137, and
+R2 of 0.991 on the held-out test set. These values indicate that the model
+explains nearly all variance in the data while keeping prediction errors minimal.
+Compared to a Linear Regression baseline, which produced noticeably higher
+MAE and lower R2, Random Forests demonstrated clear advantages in capturing
+non-linear workload–resource relationships.
+Model
+MAE
+RMSE
+R2
+Linear Regression
+0.021
+0.286
+0.93
+Gradient Boosted Trees
+0.009
+0.174
+0.98
+Random Forest
+0.004
+0.137
+0.99
+Table 1. Predictive performance of baseline and ensemble models on the
+Borg subset.
+5.2 Parity Plot Most points align tightly along the diagonal, confirming that
+the model consistently approximates true values. Only a small number of outliers
+are visible, corresponding primarily to large-scale jobs with atypical utilization
+patterns.
+8
+Harshit Goyal, BITS Pilani
+Figure 2. Parity plot for Random Forest predictions versus actual utilization.
+Most points align closely with the diagonal, confirming strong predictive
+accuracy (R2 ≈0.99).
+5.3 Residual Analysis Residuals, defined as the difference between predicted
+and observed values, are distributed closely around zero (Figure 3). The absence
+of systematic skew in residuals indicates that the model does not consistently
+overestimate or underestimate utilization. Larger deviations are rare and are
+concentrated in the tail of the distribution.
+AI for Cost-Aware Resource Prediction
+9
+Figure 3. Residuals vs Actual utilization for Random Forest predictions.
+5.4 Error by Workload Size To further understand model performance
+across workload scales, we partitioned jobs by requested CPU ranges. Prediction
+accuracy is highest for small jobs (0–5 CPUs), which constitute the majority of
+the dataset. Performance degrades slightly as workload size increases, reflecting
+the scarcity of large jobs in the training set.
+– 0–5 CPUs: MAE ≈0.003, RMSE ≈0.09
+– 5–10 CPUs: MAE ≈0.02, RMSE ≈0.25
+– 10–20 CPUs: MAE ≈0.11, RMSE ≈0.70
+– 20–50 CPUs: Sparse samples; higher error variance.
+This analysis shows the model’s robustness on common workloads and high-
+lights the challenge of rare large-scale jobs.
+5.5 Discussion of Findings These results highlight two key insights. First,
+Random Forests are highly effective at predicting resource utilization in the
+most common workload regimes, which dominate cluster operations. Second,
+prediction variance grows with workload size due to imbalance in the training
+data, underscoring the need for strategies such as data augmentation or tailored
+models for rare, high-utilization jobs.
+Overall, the model’s high R2 and low MAE confirm that AI-driven forecasting
+is a promising foundation for cost-aware autoscaling in production cloud systems.
+10
+Harshit Goyal, BITS Pilani
+6
+Practical Application in Cloud Pipelines
+The strength of predictive modeling lies not only in accuracy but in its usability
+by practitioners. To illustrate, consider a data engineer submitting a pipeline job
+with a request of 20 CPUs and 64 GB memory. Historical traces of similar jobs,
+transformed through the preprocessing pipeline, are fed into the Random Forest
+model. The prediction indicates an expected utilization of 8–10 CPUs and 40–48
+GB memory. Based on this output, the scheduler may provision 10 CPUs and 48
+GB memory, cutting the CPU request in half without compromising performance.
+Conversely, if the job’s predicted utilization exceeds the user’s request, the system
+can raise an alert, preventing under-provisioning and SLA violations.
+Engineers interact with the system through submission interfaces such as CLIs,
+APIs, or CI/CD pipelines. At job submission time, metadata and monitoring
+logs are ingested, features are extracted, and the trained Random Forest model
+provides utilization forecasts. These forecasts can then be consumed by batch or
+online scoring services, which in turn inform the autoscaler or scheduler to make
+proactive provisioning decisions.
+Such integration enables proactive autoscaling, where resources are allocated
+in anticipation of load rather than reactively after utilization spikes. For organiza-
+tions running thousands of daily jobs, even modest improvements yield significant
+benefits. For example, if predictive scaling reduces CPU over-provisioning by
+just 10% across a cluster of 10,000 cores, the savings translate into roughly 1,000
+cores’ worth of costs per scheduling cycle.
+Beyond CPU, the framework generalizes to memory, I/O bandwidth, or net-
+work throughput, enabling multi-resource optimization. Over time, incorporating
+these predictions into autoscaling policies shifts the paradigm from reactive,
+utilization-threshold scaling to AI-driven cost-aware provisioning.
+6.1 Input Data Flow At job submission time, metadata from the pipeline is
+collected, including:
+– Requested resources (e.g., CPUs, memory).
+– Historical usage features (average, maximum, sampled).
+– Distributional summaries (e.g., CPU or memory usage distribution statistics).
+These features are automatically preprocessed through the pipeline en-
+suring consistency with the training dataset regardless of the resource
+type.
+6.2 Model Inference The cleaned feature vector is passed to the trained
+Random Forest model. The model outputs:
+– Predicted utilization for the target resource (CPU, memory, or others).
+– Prediction interval (upper and lower bounds), quantifying uncertainty.
+– Confidence score reflecting model reliability based on historical patterns.
+AI for Cost-Aware Resource Prediction
+11
+6.3 Outputs for Engineers The outputs can be consumed in two complemen-
+tary ways:
+1. Resource recommendation: If a job requests 10 CPUs but the model predicts
+4–6 CPUs, the scheduler may provision closer to 6, achieving cost savings
+while mitigating under-provisioning risk. The same applies to memory or
+other resources.
+2. Risk alerts: If predicted demand significantly exceeds the requested resources,
+the model raises a flag to indicate an SLA violation. Engineers can act by
+revising allocations or prioritizing the job differently.
+6.4 Integration with Cloud Systems The model can be embedded into
+common orchestration frameworks:
+– Kubernetes Horizontal Pod Autoscaler (HPA): Extend autoscaling policies to
+include model-driven predictions instead of simple threshold-based scaling.
+– Apache YARN / Spark: Use predictions to guide initial executor provisioning.
+– Workflow managers (Airflow, Camunda): Schedule batch tasks with proactive
+resource allocation.
+6.5 Cost-Awareness and Business Impact By continuously feeding job
+metadata and usage histories into the model, cloud systems evolve from reactive
+scaling (based on observed load) to proactive, AI-driven autoscaling. This reduces
+over-provisioning costs for common workloads while improving reliability for
+large-scale jobs. For organizations running thousands of jobs daily, even a modest
+10–15% reduction in over-provisioned CPUs or memory translates into significant
+operational savings.
+7
+Discussion
+The experimental results demonstrate that ensemble learning methods such as
+Random Forests can provide highly accurate forecasts of resource utilization in
+big data pipelines. The parity plots and residual analysis confirm that the model
+captures non-linear workload–resource relationships effectively, with minimal bias
+across the majority of jobs. At the same time, the error-by-bin analysis highlights
+an important limitation: prediction quality diminishes for large, less frequent
+jobs due to dataset imbalance. This phenomenon has been noted in prior studies
+on workload prediction, where rare events tend to dominate error metrics despite
+representing a small fraction of overall activity.
+Compared with existing approaches, our work emphasizes cost-awareness as
+a guiding principle. Reinforcement learning and deep neural models have shown
+promise in autoscaling tasks [2,3], but often require large training sets, extensive
+tuning, and greater computational resources. In contrast, Random Forests are
+lightweight, interpretable, and well-suited for medium-scale datasets such as Borg
+traces. Furthermore, feature importance measures provide transparency into
+12
+Harshit Goyal, BITS Pilani
+workload drivers, enabling practitioners to understand which characteristics (e.g.,
+requested CPUs, maximum observed memory) contribute most to predictions.
+The practical deployment pathway outlined in Section 6 positions this frame-
+work not just as an academic exercise but as a system component for production
+clusters. By integrating predictions into Kubernetes autoscalers or Spark/YARN
+schedulers, organizations can proactively optimize resource allocation. The antici-
+pated business impact is twofold: reduction in cloud expenditure through less over-
+provisioning, and increased reliability by flagging potential under-provisioning
+before jobs execute.
+Nonetheless, several challenges remain. First, the evaluation uses a subset
+of Borg traces; broader validation across multiple datasets and domains would
+improve confidence in generalizability. Second, while the current implementation
+predicts a single resource at a time (CPU or memory), real-world autoscaling
+decisions require multi-resource modeling to capture joint utilization patterns.
+Third, job arrival times and temporal correlations are not explicitly modeled,
+suggesting future integration with sequence learning methods such as LSTMs.
+Overall, these findings underscore both the promise and the boundaries of
+Random Forest–based prediction in cloud environments. The method excels
+in robustness and interpretability but leaves opportunities for more advanced
+architectures to address rare events and multi-resource interactions.
+8
+Conclusion and Future Work
+This study presented an AI-driven framework for cost-aware resource prediction
+in big data pipelines. Using the Google Borg traces as a case study, we designed a
+preprocessing pipeline for semi-structured logs, trained a Random Forest regressor,
+and demonstrated predictive accuracy with R2 values exceeding 0.99. Beyond
+accuracy, the framework was evaluated in terms of deployment readiness: it
+integrates seamlessly with existing scheduling and autoscaling systems, enabling
+proactive scaling decisions that reduce costs while safeguarding performance.
+The key contributions of this work include: a resource-agnostic preprocessing
+pipeline, a cost-aware predictive modeling framework, and an applied pathway
+showing how engineers and system operators can embed these predictions into
+production pipelines. Together, these elements bridge the gap between academic
+modeling and real-world usability.
+Future work will extend this framework in several directions. First, multi-
+resource prediction—jointly modeling CPU, memory, and network utilization—
+will better reflect real-world workload requirements. Second, techniques for
+handling rare-event imbalance, such as oversampling or hybrid models, are needed
+to improve accuracy for large, infrequent jobs. Third, benchmarking against deep
+learning models (LSTMs, Transformers, Graph Neural Networks) will clarify
+trade-offs between interpretability, training cost, and predictive power. Finally,
+integrating the model into a live autoscaler will provide empirical evidence of
+its ability to deliver measurable cost savings and SLA compliance in production
+settings.
+AI for Cost-Aware Resource Prediction
+13
+By advancing both the technical accuracy and the practical applicability of
+AI-based resource prediction, this work takes a step toward more intelligent,
+cost-efficient cloud infrastructures.
+9
+References
+1. Reiss, C., Tumanov, A., Ganger, G.R., Katz, R.H., Kozuch, M.A.: Google
+Cluster-Usage Traces: Format + Analysis. Google Research (2011)
+2. Breiman, L.: Random Forests. Machine Learning 45(1), 5–32 (2001)
+3. Dean, J., Barroso, L.A., Borthakur, D., et al.: Large-Scale Cluster Manage-
+ment at Google with Borg. In: Proc. EuroSys. ACM (2015)
+4. Mao, M., Humphrey, M.: A Survey on Machine Learning for Cloud Resource
+Management. ACM Computing Surveys 54(3), 1–36 (2021)
+5. Xu, J., Bi, J., Zhao, Y., Wang, H.: Reinforcement Learning for Cloud Resource
+Autoscaling. IEEE Trans. Cloud Computing 8(1), 85–98 (2020)
+6. Zhang, Y., Chen, X., Xu, C., Li, K.: Deep Learning for Resource Demand
+Prediction in Cloud Environments. Future Generation Computer Systems
+125, 667–678 (2022)
+7. Ali-Eldin, A., Tordsson, J., Elmroth, E.: Cost-Aware Autoscaling for Cloud
+Applications. ACM Transactions on Modeling and Performance Evaluation
+of Computing Systems 5(2), 1–25 (2020)
+Appendix A: Data Preprocessing
+This appendix provides a detailed account of the transformations applied to
+the Borg traces prior to model training. The preprocessing steps included:
+– Dropping irrelevant metadata columns (Unnamed:0, time, machine_id, con-
+straint, user, collection_name, collection_logical_name, start_after_collection).
+– Parsing nested JSON-style fields into structured columns, e.g., splitting re-
+source_request into resource_request_cpus and resource_request_memory.
+– Decomposing aggregated usage fields (average_usage, maximum_usage, ran-
+dom_sample_usage) into CPU and memory subfields.
+– Summarizing distributional columns (cpu_usage_distribution, tail_cpu_usage_distribution)
+with statistical descriptors (mean, standard deviation, min, max, quartiles).
+– Encoding categorical attributes using frequency encoding, while dropping
+high-cardinality identifiers.
+– Filling null values with zeros or safe defaults.
+The result of this pipeline was a compact dataset of ~25 numeric features per
+job, suitable for machine learning while preserving predictive signal.
+Appendix B: Hyperparameter Search Space
+We applied RandomizedSearchCV to tune Random Forest parameters. The
+following ranges were explored:
+– n_estimators: [50, 100, 200, 400]
+– max_depth: [None, 10, 20, 40]
+14
+Harshit Goyal, BITS Pilani
+– min_samples_split: [2, 5, 10]
+– min_samples_leaf: [1, 2, 4]
+Each candidate was evaluated with 3-fold cross-validation using R2 as the
+scoring metric. The best-performing configuration was:
+– n_estimators = 100
+– max_depth = 20
+– min_samples_split = 10
+– min_samples_leaf = 1

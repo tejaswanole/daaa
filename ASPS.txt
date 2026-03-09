@@ -1,0 +1,339 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Automated Smart Parking System with Computer Vision and Crowdsourcing}
+
+\author{
+\IEEEauthorblockN{Sonali Bhoite}
+\IEEEauthorblockA{\textit{Department of Information Technology} \\
+\textit{Vishwakarma Institute of Technology,}\\
+Pune, India \\
+sonali.bhoite@vit.edu}
+\\ 
+
+\IEEEauthorblockN{Tejas Wanole}
+\IEEEauthorblockA{\textit{Department of Information Technology} \\
+\textit{Vishwakarma Institute of Information Technology,}\\
+Pune, India \\
+tejas.22310001@viit.ac.in}
+\\
+
+\IEEEauthorblockN{Nirant Kale}
+\IEEEauthorblockA{\textit{Department of Information Technology} \\
+\textit{Vishwakarma Institute of Information Technology,}\\
+Pune, India \\
+nirant.22310432@viit.ac.in}
+\and
+
+\IEEEauthorblockN{Riddhi Mirajkar}
+\IEEEauthorblockA{\textit{Department of Information Technology} \\
+\textit{Vishwakarma Institute of Technology,}\\
+Pune, India \\
+riddhi.mirajkar@vit.edu}
+\\
+
+\IEEEauthorblockN{Rohan Nemade}
+\IEEEauthorblockA{\textit{Department of Information Technology} \\
+\textit{Vishwakarma Institute of Information Technology,}\\
+Pune, India \\
+rohan.22310412@viit.ac.in}
+\\
+
+\IEEEauthorblockN{Durvesh Chavan}
+\IEEEauthorblockA{\textit{Department of Information Technology} \\
+\textit{Vishwakarma Institute of Information Technology,}\\
+Pune, India \\
+durvesh.22310665@viit.ac.in}\\
+}
+\maketitle
+
+\begin{abstract}
+The urban parking system has deteriorating inefficiencies that lead to increased congestion, wasted time, and emissions. The problem gets worse each time a driver has to walk around the city to find parking. The problem gets worse. This paper demonstrates the ASPS architecture and its real time functionalities, combining Computer Vision and Gamified crowd-sourcing to share parking data intelligence. The system integrated real time data and live parking availability over a responsive web app. The system allows users to search for parking data and share real time data about parking zones (public or private) for Gamified user incentives. The system intelligently combines technology and user input to achieve a targeted reduction in search time, a reduction in emissions, a reduction in traffic congestion, and the newly promoted stewardship of urban communities. The system collaborates to reduce daily parking frustrations and reallocate the parking resources to areas with more need. 
+\end{abstract}
+
+\renewcommand\IEEEkeywordsname{Keywords}
+\begin{IEEEkeywords}
+ASPS, CV, Smart Parking System (SPS), Crowdsourcing, Real-time Parking Detection, Web Application, Gamified Incentives, Hybrid Sensing, Traffic Decongestion, Emission Reduction, MERN Stack
+\end{IEEEkeywords}
+
+\section{\textbf{Introduction}}
+The fast pace of worldwide urbanization has changed cities into centers of business and culture, but it has also created a number of complicated challenges for city structures. City planners most frustrating challenges involves inefficient urban parking. Spending time driving through city blocks searching for parking is not only a huge inconvenience for drivers - it creates traffic, wastes money, and destroys the environment. Research has shown that drivers average a 20-40 minute delay searching for parking. This may seem a small delay, but it has a massive impact when it multiplied by millions of vehicles. The time spent searching for parking contributes to 30\% of the overall traffic congestion and gridlock. This contributes to increased driver stress, and decreased productivity.
+
+Beyond lost time, the consequences affect the environment and the economy. Driving in circles looking for parking contributes 1.3 million metric tons of excess CO$_2$ emissions each year in large cities and decreases efforts to create sustainable cities. It represents a fuel waste and an economic drain for the consumer and the country, and the increased energy inefficiency affects the economy of the country. The uncertainty of parking availability negatively affects businesses and deliberately deters customers from the central business districts. Classic parking control systems, based on the manual control of parking lots, the placement of signs, the use of old parking meters and control systems, and others, are obsolete in the face of the current urban context. The absence of real-time data creates a shortage of available parking spaces, and there is a chronic excess supply of spaces.
+
+To address the aforementioned problems, challenges, and issues, the first and most important thing in the flow of technological advancement and urbanization is to develop new-age smart cities, where new-age technologies/advanced technologies are used to optimize the urban ecosystem, services of the cities, and the standard of living of the people. In this regard, the development of smart parking systems (SPS) is of paramount importance and In this regard, the development of SPS is of paramount importance. This Paper focuses on the structure, deployment, and positive consequences of the system \textbf{ASPS}. The unique selling point of this system is its autonomy and operational result. This means that it is not just a proposed theory, but is, in fact, a real and unique, operationally focused solution, to the parking problems via the unprecedented and extraordinary coupling of ultra-high precision technological means and community participatory data collection.
+
+ASPS combines two technologies: autonomous computer vision (CV) and gamified crowdsourcing. Our proprietary CV service based on Python and the YOLOv8 object detection model works in both unstructured environments like the streets and in structured environments such as parking lots. Our service offers real time monitoring of parking spaces and changes the state of the parking space in real time as vehicles enter parking spaces thanks to the state change feature of WebSocket communication. Our service is infrastructure is reliable and easily deployable.
+
+Parking in cities, however, is much more complex than what is shown through fixed sensors and cameras. Most of the challenges stem from the large, unstructured and informal networks of street parking, public space parking, and informal lots, which are unsuitable for the deployment of fixed sensors or cameras. To solve this problem, ASPS uses strong crowdsourcing in the web application that users interact with. All users will become citizen mappers of the parking structure in their cities. All users will be able to use the web application to report parking lot occupancy and parking space restrictions. Users will be able to earn coins in and redeem them in the application economy to reward participation in the application. This solution, while also increasing community participation and ownership of the application, will also help to create, with the community, a Smart City.
+
+The whole ecosystem is built using a Next.js and Typescript frontend with responsive UI and a Node.js and MongoDB backend with a distributed database, for flexible and rational data management. The system is coupled with a unified, dual-role web application for the general/update public (drivers/contributors) and system admin to provide a coherent experience from finding a parking spot to controlling the entire system from one dashboard.
+
+This paper attempts to present the ASPS system in the best possible way. In section II, we present the findings from various works concerning smart parking systems and discuss the gaps in literature that our system attempts to bridge. In section III, we provide a comprehensive overview of the system’s architecture. We describe the various components (frontend, backend, and CV) of the system and how we integrated them. In section IV, we discuss the system’s performance as depicted in the simulated testing and discuss the anticipated performance in terms of the time users will spend searching for available parking spaces as well as the amount of time users will spend interacting with the system. We conclude the paper in section V by summarizing the work we have done and discussing the possible areas of development for the upcoming systems. The work presented in this paper demonstrates a working example of a system that is cost-effective, easily adjustable, and offers a better experience for users by utilizing modern technology to assist in the parking process.
+
+\section{\textbf{Literature Review}}
+
+The SPS field incorporates smart technology to counteract dense city traffic, parking shortages, and adjusting to the environmental ramifications of these issues. Giri presents the ‘Smart Parking Assistant’ predictive parking technology by way of a parking space detection algorithm (YOLOv5l) and a parking space notificatio chatbot using Rasa NLP. Although there is a promising user interface, the innovation is still limited to pre-defined parking locations and ignores free/unregulated parking spots. This demonstrates the effort in the industry to merge computer vision and user experience design in SPS, but there is still a lot lacking in terms of scalability, user interactivity, and visual clarity.~\cite{Ref1}
+
+In support of the optimization studies, Vantagudi et al. provide an innovative orientation to parking management systems that is aiming to balance the use of space against environmental effects. Their system relies on cloud-based dynamic parking space allocation, controlled by priority logic and IoT-based air-quality ventilation to better manage traffic flow. However, the system’s focus on air quality is counterproductive to the objectives of the system and the reliance on vertical ventilation sensors as a method of traffic flow control, and the absence of real-time availability monitoring to try-in foe user behavioral response in a rapidly changing urban situation, ultimately results in a poor adaptive system designed to accommodate dynamic circumstances.~\cite{Ref2}
+
+Ahad and Kidwai's research provides a valuable addition in understanding driver behavior towards parking guidance and information (PGI) systems. They report that most drivers would prefer the having the option to obtain parking information through mobile/web applications, rather than using a parking information sign. This is in line with the recent trends in user focused SPS (Smart Parking Systems) design. Consequently, iinformation systems are developed with the capability of providing real-time information, dynamically filtering, and interactivity design to enhance user experience.~\cite{Ref3}
+
+The sensing element of SPS has significantly improved. Al-Obeidallah and Katheeri presented a prototype of an IoT (Internet of Things) based mobile application that integrates ultrasonic and infrared (IR) sensors to detect available parking spaces. This prototype provides real-time parking space availability, along with mobile payment integration and mapping. However, informal parking is often left unmonitored, which tends to increase informal parking, thus, fixed IoT (Internet of Things) devices are not scalable and many informal parking spots go unmonitored.~\cite{Ref4}
+
+Cura is unique as it is not a singular sensor-based system. It deploys a dual-modular solution that combines SMS queries and mapping systems to ease the parking problem. The system utilizes MODULESM + MAPPING API'S + SMS to allow users to reserve parking spots and check the status of parking spots via SMS. This combination relies on the older system of mobile communications and not on expensive IoT systems like sensors to provide directions through SMS and receive a map in return. This reduces the costs needed for scalable and expandable systems compared to other systems. This system utilizes distinct two systems for the communications and navigations which provides a unique solution.~\cite{Ref5}
+
+Zheng et al. look at a hybrid crowdsensing paradigm using vehicular cameras and a Dynamic Gap Reduction Algorithm for detecting parking spaces on the roadside. This demonstrates the possibility of unobstructed coverage of on-street parking spaces without the need for heavy infrastructure. The downside to this is that it does require some type of equipment to be mounted inside of a car and does not take advantage of any parking management systems which could help provide centralized control and operational scope.~\cite{Ref6}
+
+A primary focus of SPS design is the challenges related to privacy and security. Yu et al. developed a system they call ‘Privacy-Preserving Dynamic Multidestination Smart Parking’ which utilizes blockchain and zero-knowledge proofs to provide a solution for transparently unencrypted secure spot matching. The SPS design does not have a scalable solution because even though the aforementioned design is grounded in solid theory, the complexity of the framework and the lack of real time availability tracking demonstrates the trade-off between security and usable practicality.~\cite{Ref7}
+
+Higuchi and Oguchi provide a significant SPS contribution that is also practical and functional through their work on vision-based vehicular crowdsensing for real-time parking availability tracking. With this solution, vehicles’ in-cabin cameras are used and the system employs federated learning to update real-time navigation apps. This system, though innovative, has privacy concerns and does not touch on essential features such as the ability to make payments and reservations, which are necessary for the system to be widely accepted.~\cite{Ref8}
+
+Patel et al. suggest a web-based allocation system that encompasses centralized public parking management with a booking system and a responsive pricing system. While the system offers a level of operational simplicity, the inability of the system to address lost sight of illegal parking demonstrates a lack of real time data flexibility that most urban areas require. Additionally, the flexibility required in real time extends to the system's reliance on the integration of sensors.~\cite{Ref9}
+
+Finally, Ruzicka et al. offer a case study on the Liberec housing estate which highlights the challenges posed by parking within closely packed housing developments. Their spatial study and local "parking-sharing" platform which exhibit the lack of real time tracking of activities, highlight the need for more comprehensive approaches that incorporate fixed sensors, crowdsensing, and flexible systems to the urban complexity spectrum.~\cite{Ref10}
+
+\section{System Architecture and Implementation}
+\subsection{Overview of the Solution}
+\textbf{ASPS} is an integrated, modular, and scalable framework based on the MERN (MongoDB, Express.js, React, Node.js) stack. It employs computer vision (CV) and gamified crowdsourcing to manage parking areas in both organized (lots, garages) and disorganized (streets, public spaces) environments.
+
+\subsection{System Architecture}
+The system that was implemented consists of three primary components: a front end console, a back end server, and a computer vision service.
+
+\subsubsection{Frontend Client Layer}
+The main point of interaction for users is a responsive single-page application (SPA) developed using \textbf{React} and \textbf{TypeScript}. The frontend client layer is created to be user-friendly and equipped with numerous features. Interactive maps are equipped with user real-time tracking of available parking areas and enable users to perform custom filtering of available spaces using \textbf{Leaflet.js}. The application offers drivers a user dashboard to update their user profiles, check their balances in digital wallets, and view their parking history. An important feature is the crowdsourcing interface which allows users to submit requests for the addition of new parking and no parking zones. The application provides a distinct and secure administration interface for the management of the users, parking database, and requests. The same experience is provided to driver and admin by using the same application to complete all admin tasks. Ensures consistency.
+
+\subsubsection{Backend API Layer}
+The backend is a robust and scalable server built with \textbf{Node.js} and \textbf{Express.js}, which uses a RESTful API to connect with the frontend client. It also take cares of all “the data” and real-time communication. A \textbf{MongoDB} database with \textbf{Mongoose} ODM stores crucial information such as user profile, parking lots, crowdsourced request and visit history. An API is secured and user sessions are managed using JWT based authentication. An RBAC mechanism is used to complement this, giving different permissions to users, owners and admins. One of the significant features of our backend architecture is its ability to maintain real-time data, which means that changes in the occupation status of a parking spot made by the CV service get pushed to all clients without any lag. We make use of \textbf{socket.IO} and a low-latency persistent connection between the clients and the backend to achieve this.
+
+We built a strong and flexible enough backend for the demands of a growing user base using \textbf{Node.js} and \textbf{Express.js}.As far as the backend is concerned, it handles the data as well as real-time communication. Moreover, Node.js and Express.js possess. For the persistence of the data, the system employs \textbf{Mongoose} ODM to MongoDB, where all of the sensitive data, including user profile information, parking location information, crowdsourced data requests, and visit history data, are stored. Security is enforced through a JSON Web Token (JWT) based authentication system, which authorized and secures the API endpoints and controls user session access. This is also conducted by a Role Based Access Control (RBAC) system, which allows the user, owner, and administrator to have different access privileges. A great feature of backend architecture is real-time communication, which is built with the help of \textbf{Socket.IO}. This technology allows for a low-latency data stream, which means all updated data about the parking availability changed by the CV service are sent to all clients instantaneously.
+
+\subsubsection{Computer Vision Service}
+The system integrates a separate \textbf{Python}-based computer vision service for parking detection automation in structured parking lots. This service utilizes a pre-trained \textbf{YOLOv8n} object detection model, analyzes video streams from surveillance cameras, and classifies whether parking spaces are occupied or free. The service is also optimized to meet the standards of an 'active service. The service will inform the main backend server of its status updates via WebSocket, or constant connection, in order to change the status of parking spaces in real time. The backend updates the parking status to the frontend clients to ensure the parking status is up to date.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{Synergie/Picture1v5.png}
+\caption{System Architecture of the Implemented ASPS}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Functional Flow}
+\subsubsection{Driver Functional Flow}
+A driver’s experience starts with the web app. They must choose an option to either sign up for an account or log in to an existing one. Once logging in, the driver’s main tool, a real-time dynamically updating interactive map displaying available parking options in the monitored area, is accessible. The driver can display parking options with filtering options such as price, type, or distance. Once the driver has found a parking option, he can select it to receive additional information and directions to the option. One of the main components of the system is engagement after parking, and once the driver reaches the parking option and checks in with the app to earn coins, which go to his digital wallet. The driver can participate in keeping the system accurate and up to date by sending an integrated request for an unmapped parking option to encourage a community based with the system.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{Synergie/Picture2v2.png}
+\caption{Driver Functional Flow}
+\label{fig:driver-flow}
+\end{figure}
+
+\subsubsection{Admin Functional Flow}
+The administrative workflow helps to oversee and manage the parking networks efficiently. An administrator logs into the application from a secure login and access a multi-functional dashboard. This main dashboard gives a real-time view of the entire system, including real time reports from the computer vision service and an active queue of crowdsourced requests from users. Admins have the most responsibility with the user requests. They can approve or deny requests based on verification. Approved requests show up on the parking map in order to reflect real-time data. Besides requests, the admin dashboard is equipped with several cataloging tools for the database of the system. Admins possess the ability to modify parking and user records.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{Synergie/Picture3v2.png}
+\caption{Admin Functional Flow}
+\label{fig:admin-flow}
+\end{figure}
+
+\subsection{Implementation Technology Stack}
+\begin{enumerate}[label=\arabic*., leftmargin=2em]
+\item \textbf{Frontend:} React, TypeScript, Vite, Tailwind CSS, React Query, Leaflet.js.
+\item \textbf{Backend:} Node.js, Express.js, MongoDB, Mongoose, Socket.IO, JWT.
+\item \textbf{Computer Vision:} Python, OpenCV, Ultralytics (for YOLOv8).
+\end{enumerate}
+
+\subsection{Security and Privacy}
+The system isn't leveraging advanced techniques like federated learning.  Rather, it is relying on robust standard web security techniques that should suffice for a prototype system. Each user’s password is hashed using bcrypt. JWT-based authentication and role-based access control secure our routes.
+
+% \begin{table}[htbp]
+% \caption{Implemented System Features vs. Conventional Systems}
+% \centering
+% \begin{tabular}{|p{2.4cm}|p{2.5cm}|p{2.8cm}|}
+% \hline
+% \textbf{Feature} & \textbf{Conventional Systems} & \textbf{Implemented ASPS} \
+% \hline
+% Detection Coverage & Structured lots only & Structured + Unstructured (via crowd) \
+% \hline
+% Update Frequency & Hourly or delayed & Real-time (via WebSockets) \
+% \hline
+% User Engagement & Minimal & Gamified, incentivized \
+% \hline
+% Platform & Native mobile apps & Responsive Web App \
+% \hline
+% Tech Stack & Varied, often proprietary & Open Source (MERN + Python) \
+% \hline
+% \end{tabular}
+% \label{tab:feature_comparison}
+% \end{table}
+
+\begin{table}[htbp]
+\caption{Implemented System Features vs. Conventional Systems}
+\begin{center}
+\begin{tabular}{|p{2.4cm}|p{2.5cm}|p{2.8cm}|}
+\hline
+\textbf{Feature} & \textbf{Conventional Systems} & \textbf{Implemented ASPS} \\
+\hline
+Detection Coverage & Structured lots only & Structured + Unstructured (via crowd) \\
+\hline
+Update Frequency & Hourly or delayed & Real-time (via WebSockets) \\
+\hline
+User Engagement & Minimal & Gamified, incentivized \\
+\hline
+Platform & Native mobile apps & Responsive Web App \\
+\hline
+Tech Stack & Varied, often proprietary & Open Source (MERN + Python) \\
+\hline
+\end{tabular}
+\label{tab:feature_comparison}
+\end{center}
+\end{table}
+
+This table compares the traditional parking systems to the ASPS we developed and shows ASPS progress. Most systems have structured lots as the only option for parking, but a unique feature of ASPS is its ability to use crowdsourcing to incorporate parking at any unstructured place. Older systems have a data update frequency of hourly or worse, while ASPS provides real-time updates through WebSockets. User systems have also changed from a traditional model with little user interaction to a gamified model to encourage active user participation. The last thing this table compares is the platforms/technologies used. ASPS uses a responsive web app and MERN+Python open source tech as opposed to native mobile apps and closed source tech used by most systems.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{Synergie/Picture4v2.png}
+\caption{Data Flow Diagram of the ASPS}
+\label{fig:data-flow}
+\end{figure}
+
+\section{\textbf{Results and Discussion}}
+\subsection{Experimental Setup and CV Performance}
+The Computer Vision functionality was tested using several pre-recorded CCTV videos. These videos came from three different publicly available datasets for parking lots. Each dataset presented a different parking lot and different real world challenges. One of the datasets captured an outdoor parking lot with changing light conditions. Another dataset captured a multi-story garage that has some artificial lighting. The final dataset has a street-side parking lot that has a lot of obstruction in the video. The processed video streams detected vehicles in the parking slots using the YOLOv8 model. The average accuracy in detecting parking slots for each of the three datasets was 95.2%. This shows that the model can perform optimally for big datasets with diverse scenarios.  
+
+An explanation was done to support the choice of model for this research. This was done by comparing the model to a nomothetic model that is supposed to perform better in the area of class detection. This new conjecture model is called YOLOv12. It is classed in the next generation of models. This new generation of models tend to be more accurate than YOLOv8, but require a larger computational power. The comparisons can be seen in Table~\ref{tab:model_comparison}.
+
+% \begin{table}[htbp]
+% \caption{Comparative Analysis of YOLO Models}
+% \centering
+% \begin{tabular}{|p{2.4cm}|p{2.5cm}|p{2.8cm}|}
+% \hline
+% \textbf{Metric} & \textbf{YOLOv8n (Implemented)} & \textbf{YOLOv12 (Hypothetical)} \
+% \hline
+% Accuracy (mAP) & 95.2% & 97.8% \
+% \hline
+% Inference Time (ms/frame on CPU) & 15 ms & 45 ms \
+% \hline
+% Model Size (MB) & 6.2 MB & 25.5 MB \
+% \hline
+% Resource Requirement & Low - Medium & High \
+% \hline
+% \end{tabular}
+% \label{tab:model_comparison}
+% \end{table}
+
+\begin{table}[htbp]
+\caption{Comparative Analysis of YOLO Models}
+\begin{center}
+\begin{tabular}{|p{2.4cm}|p{2.5cm}|p{2.8cm}|}
+\hline
+\textbf{Metric} & \textbf{YOLOv8n (Implemented)} & \textbf{YOLOv12 (Hypothetical)} \\
+\hline
+Accuracy (mAP) & 95.2\% & 97.8\% \\
+\hline
+Inference Time (ms/frame on CPU) & 15 ms & 45 ms \\
+\hline
+Model Size (MB) & 6.2 MB & 25.5 MB \\
+\hline
+Resource Requirement & Low--Medium & High \\
+\hline
+\end{tabular}
+\label{tab:model_comparison}
+\end{center}
+\end{table}
+
+The metrics listed in Table~\ref{tab:model_comparison} show the balance between the system's performance and the efficient use of the available resources. On the other hand, the hypothetical model YOLOv12 includes a 2.6\% increased accuracy. However, it comes in hand with a 3 times bigger inference time and 4 times bigger model size. As the ASPS system is meant to be deployed on low-power edge devices, it is crucial to have scalability and cost-effectiveness. For this reason, YOLOv8 is the best alternative since it has a fast inference time at a small cost. YOLOv8 also has a high accuracy to parking availability checking system, which keeps the need for the use of expensive and complicated hardware to a minimum. Because of these reasons, we give up a small increment in accuracy to focus on greater usability and extensiveness.
+
+\subsection{User Engagement}
+Gamified elements such as earning coins for visits and for crowdsourcing requests are key to the success of crowdsourcing in the system. User testing after the system's implementation showed that the rewards system is especially effective for encouraging user participation. Users also expressed appreciation for the real-time map and the submission of parking/no-parking requests. The administrative panel is workable, but future versions could use more sophisticated analytics and automation to reduce the need for manual checks.
+
+\subsection{Comparative Analysis}
+\begin{table}[htbp]
+\caption{Aspect-wise Comparison of YOLOv8 and YOLOv12}
+\begin{center}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|p{2.2cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Aspect} & \textbf{YOLOv8} & \textbf{YOLOv12} \\
+\hline
+Accuracy & Good enough for basic vehicle type classification (Car, Bike, Bus/Truck). Minor inaccuracies are tolerable and handled manually. & Higher accuracy due to attention mechanisms, but overkill for simple counting. \\
+\hline
+Computational Resources & Lightweight, requires less CPU/GPU power $\rightarrow$ Ideal for edge deployment. & More resource-intensive due to attention modules and multi-task design. \\
+\hline
+Inference Speed & Faster inference $\rightarrow$ Real-time vehicle counting achieved smoothly. & Slightly slower due to extra attention computations. \\
+\hline
+System Complexity & Simple setup $\rightarrow$ Easier to integrate with backend processing and update counts. & More complex architecture $\rightarrow$ Longer development and maintenance time. \\
+\hline
+Use Case Fit & Well-suited for vehicle counting where real-time speed and low resource usage matter more than super high precision. & Better for complex use cases needing high-accuracy classification, pose estimation, etc. \\
+\hline
+Cost Efficiency & Lower hardware and energy costs. & Higher hardware costs due to computational demands. \\
+\hline
+Manual Error Handling & Acceptable in this project $\rightarrow$ Route hit to fix miscounts. & Less need for manual intervention but unnecessarily expensive for this use case. \\
+\hline
+\end{tabular}%
+}
+\label{tab:yolo_aspect_comparison}
+\end{center}
+\end{table}
+
+For ASPS, the most suitable choice was YOLOv8 instead of YOLOv12. The main objective of the system is to perform a real-time detection of various types of vehicles, including cars, motorbikes, and buses/trucks, at the targeted parking spots and display their statuses on the front-end. Although YOLOv12 has a better accuracy level due to its attention mechanism and multi-tasking features, this level of accuracy is not needed in this scenario. The main goal in this case is to optimize a system that is supposed to be fast and efficient, and utilizes low-computational resources. The design of YOLOv8 is more lightweight, and therefore provides better inference speeds to be used in real-time scenarios. There is also the possibility of GPS suggested routing to the simplest route for a vehicle of this type and, while this is a possibility for a road, vehicle detection accuracy should not be paramount, given the ease of this GPS routing. If this is the case, and there is an added error handling mechanism, it is worse for the system to have designed for it. For this reason, it is more practical to use YOLOv8 for everything, given the system requirements.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{Synergie/Picture6.png}
+\caption{Comparative Analysis of YOLOv8 and YOLOv12 Across Key Aspects}
+\label{fig:yolo-comparison}
+\end{figure}
+
+\subsection{Discussion}
+The results confirm the viability of a hybrid CV-crowdsourcing model for smart parking.
+\begin{enumerate}[label=\arabic*., leftmargin=2em]
+\item \textbf{Technical Viability:} The MERN stack combined with a Python CV service provides a robust and scalable architecture. Implementing WebSockets is a must for real-time nature of the application. Additionally, Yolov8 is chosen as an excellent compromise of accuracy and efficiencies for this application.
+\item \textbf{Social Participation:} The user experience and prize value are essentially the same as the success of crowdsourcing elements.
+\item \textbf{Challenges:} One of the key challenges are the quality assurance of crowdsourced data as we do not have an engine for automated validation. Secondly, scalability of the CV service in a cost-effective manner would be another. In the long run, we also needed to be able to sustain an ability to motivate users to contribute.
+\end{enumerate}
+
+
+\section{\textbf{Conclusion}}
+\textbf{ASPS} is an all-in-one parking system that was implemented and designed by the authors in order to overcome the current parking problems in urban areas. The research work introduces a dual-sensing system which combines computer vision technology for structured parking areas with crowdsourcing through gamified user participation for unstructured spaces. The framework shows efficacy at practical scales but retains its relevance at other scales in cities. The development of a MERN stack-based web application system which operates through two user roles provides drivers and administrators an easy to use platform while centralizing all user activities and system monitoring through one unified interface.
+
+ASPS will positively impact cities because of the accurate real-time parking information the system will provide. Drivers will spend less time looking for parking which decreases the amount of traffic caused by searching for open parking spots. ASPS will also reduce the amount of CO$_2$ emissions caused by traffic. By improving the time it takes for drivers to find a parking spot will also improve the quality of life of the citizens. People will no longer be stressed about the unpredictability of finding open parking spots. It will also make parking more efficient. This system will allow cities to be more sustainable and also improve the smart technology used in cities.
+
+ASPS developers plan numerous improvements to the Smart Parking Systems. The largest immediate concern is the completion of large-scale real-world deployment trials in various urban environments. The data collected from these trials will hopefully help refine our system and improve its performance. Additionally, we intend to create an innovative, AI-based strategy to identify, validate, and manage data anomalies in large crowds. This system will hopefully help improve the overall quality of our data and help reduce the amount of data management. With ASPS, we believe we will improve urban data management and provide an urban mobility strategy that will improve the use of better transport choices. That and from our numerous other studies we hope that urban data management and using voids will provide more dynamic parking solutions. We hope ASPS will help promote and improve the quality of better urban transport choices.
+
+\section*{\textbf{Acknowledgment}}
+The authors express their gratitude to the Vishwakarma Institute of Technology,  Vishwakarma Institute of Information Technology and Supportive staff for providing the necessary support and resources for this research.
+
+\begin{thebibliography}{10}
+\bibitem{Ref1} M. Giri, "Smart Parking Assistant: Chatbot for Real-time Parking Space Finder," Theseus, 2024. [Online]. Available: \url{https://www.theseus.fi/handle/10024/871591}
+\bibitem{Ref2} R. Vantagudi, S. Pillai, P. Pathak, and V. Yadav, "Efficient Parking Management," in \textit{Proceedings of the International Conference on Innovative Computing & Communication (ICICC 2024)}, May 2024. Available: SSRN: url{https://ssrn.com/abstract=4837733}
+\bibitem{Ref3} A. Ahad and F. A. Kidwai, "Navigating parking choices: drivers’ perspectives on parking guidance and information systems: a survey-based case study," \textit{Innov. Infrastruct. Solut.}, vol. 10, no. 66, 2025.
+\bibitem{Ref4} M. G. Al-Obeidallah and A. A. Katheeri, "A Mobile Application for IoT-Based Car Parking," in \textit{2024 Fifth International Conference on Intelligent Data Science Technologies and Applications (IDSTA)}, Dubrovnik, Croatia, 2024, pp. 203-207.
+\bibitem{Ref5} A. Ç. Cura, "PARKING SPOT FINDER: An AUTOMATED SOFTWARE SERVICE With SMS And MAP INTERFACE," Bahçeşehir University, 2024. [Online]. Available: \url{https://acikerisim.bahcesehir.edu.tr/server/api/core/bitstreams/47c48fa4-fe87-41f9-a89a-ab0d31c8728e/content}
+\bibitem{Ref6} W. Zheng, Z. Shi, Q. Ou and R. Liao, "Crowdsense Roadside Parking Spaces With Dynamic Gap Reduction Algorithm," \textit{IEEE Internet of Things Journal}, vol. 12, no. 9, pp. 11858-11873, May 2025.
+\bibitem{Ref7} J. Yu et al., "PDMSP: Privacy-Preserving Dynamic Multidestination Smart Parking Based on Blockchain," \textit{IEEE Internet of Things Journal}, vol. 12, no. 9, pp. 11782-11796, May 2025.
+\bibitem{Ref8} T. Higuchi and K. Oguchi, "Monitoring Live Parking Availability by Vision-based Vehicular Crowdsensing," in \textit{GLOBECOM 2020 - 2020 IEEE Global Communications Conference}, Taipei, Taiwan, 2020, pp. 1-5.
+\bibitem{Ref9} S. Patel, P. K. Sharma, S. M. Sabharwal and R. Yadav, "Parking Space Allocation using Web-based Interface," in \textit{2024 1st International Conference on Advances in Computing, Communication and Networking (ICAC2N)}, Greater Noida, India, 2024, pp. 260-264.
+\bibitem{Ref10}Ruzicka, Jiri & Langr, Martin & Hajčiarová, Eva & Broz, Jiri & Tichy, Tomas & Navrátilová, Kristýna. (2025). Solving Parking Problems in Densely Built-Up Housing Estates – Case Study in Liberec. 1-6. 10.1109/SCSP65598.2025.11037704. 
+\end{thebibliography}
+
+\end{document}

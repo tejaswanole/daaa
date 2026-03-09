@@ -1,0 +1,684 @@
+Analysis and Optimization of Influential Factors of 
+Cloud Computing Resource Allocation Based on 
+Random Forests 
+Fangyuan Cheng 
+Tianjin University of Technology 
+Tianjin, China 
+cfy168@163.com 
+Abstract—With the continuous development of cloud 
+computing technology, efficient resource allocation has become 
+the key to improve cloud computing performance and user 
+satisfaction. In this paper, we deeply analyze the influencing 
+factors of cloud computing resource allocation based on 
+random 
+forest 
+algorithm 
+and 
+propose 
+corresponding 
+optimization strategies. By studying various factors such as 
+resource demand, task type and user behavior in the cloud 
+computing environment, a random forest model is constructed 
+to predict the resource allocation demand in order to achieve 
+more accurate resource allocation. The experimental results 
+show that the method can significantly improve the efficiency 
+and fairness of cloud computing resource allocation, providing 
+strong support for the sustainable development of cloud 
+computing. 
+Keywords—Cloud computing, Resource allocation, Random 
+forest, Influencing factors, Optimization strategy  
+I. INTRODUCTION
+Cloud computing, as an emerging computing model, has 
+been widely used in various fields. It provides users with 
+convenient, efficient and reliable services by virtualizing and 
+centrally managing computing resources, storage resources 
+and network resources. However, with the increasing number 
+of cloud computing users and the increasingly diversified 
+application requirements, how to effectively allocate 
+resources has become an important challenge for cloud 
+computing. Unreasonable resource allocation not only leads 
+to resource waste and performance degradation, but also 
+affects user experience and satisfaction. Therefore, it is of 
+great practical significance to deeply analyze the influencing 
+factors of cloud computing resource allocation and propose 
+effective optimization strategies to improve the efficiency 
+and quality of cloud computing. 
+Random forest algorithm, as a powerful machine learning 
+algorithm with the advantages of high accuracy, robustness 
+and easy parallelization, has been widely used in the field of 
+data analysis and prediction. In this paper, the random forest 
+algorithm is applied to cloud computing resource allocation, 
+which provides decision support for realizing more accurate 
+resource allocation by analyzing and predicting the factors 
+affecting resource allocation. 
+II. CLOUD COMPUTING RESOURCE ALLOCATION OVERVIEW
+A. Concepts of Cloud Computing Resource Allocation
+Cloud computing resource allocation refers to the
+allocation of computing resources, storage resources, 
+network resources, etc. of a cloud computing center to 
+different users and applications in accordance with certain 
+strategies to meet the needs of users and improve the 
+utilization of resources. The goal of resource allocation is to 
+achieve efficient utilization and fair distribution of resources 
+under the premise of ensuring service quality. 
+B. Characteristics of Cloud Computing Resource Allocation
+There are three main methods, namely static allocation,
+dynamic allocation and hybrid allocation. Static allocation: 
+resources are allocated to users and applications according to 
+a predefined policy at the startup of the cloud computing 
+system. This method is simple and easy to implement, but 
+lacks flexibility and cannot adapt to dynamically changing 
+resource demands. Dynamic allocation: Dynamically adjust 
+the resource allocation strategy based on real-time resource 
+demand and supply. This method can improve resource 
+utilization and service quality, but requires higher 
+computational cost and management complexity. Hybrid 
+allocation: Combining the advantages of static and dynamic 
+allocation, a hybrid allocation is used for resource allocation. 
+For example, static allocation can be performed at system 
+startup and then dynamically adjusted according to the actual 
+situation[1]. 
+C. Factors affecting resource allocation in cloud computing
+In the cloud computing resource allocation problem,
+there are many factors affecting the resource allocation 
+performance, including data resources, performance data, 
+and user demand data. In order to construct a random forest 
+model, we need to extract features from these factors that 
+have 
+a 
+significant 
+impact 
+on 
+resource 
+allocation 
+performance[2]. The specific features are shown in Table I. 
+TABLE I.  FACTORS AFFECTING RESOURCE ALLOCATION IN CLOUD 
+COMPUTING 
+Data category 
+Data item 
+Descriptive 
+Resource data 
+Computing 
+resources 
+CPU utilization 
+Memory 
+resources 
+Memory utilization 
+Storage 
+resources 
+Evaluate the effective 
+utilization of storage resources 
+Performance 
+data 
+ Task 
+response time 
+Storage resource requirements 
+Throughput  
+Number of tasks processed by 
+the system per unit time 
+Error rate 
+Percentage of errors that occur 
+during task execution 
+Load data 
+Server load
+Indicates the current working 
+status of the server, including 
+CPU load, memory load, etc. 
+948
+2024 IEEE 2nd International Conference on Electrical, Automation and Computer Engineering (ICEACE)
+979-8-3503-6820-8/24/$31.00 ©2024 IEEE
+December 29-31, 2024 Changchun, China
+2024 IEEE 2nd International Conference on Electrical, Automation and Computer Engineering (ICEACE) | 979-8-3503-6820-8/24/$31.00 ©2024 IEEE | DOI: 10.1109/ICEACE63551.2024.10898366
+Authorized licensed use limited to: BRACT's Vishwakarma Institute Pune. Downloaded on March 04,2026 at 05:35:01 UTC from IEEE Xplore.  Restrictions apply. 
+Data category 
+Data item 
+Descriptive 
+Network load  
+Reflects the busyness of 
+network transmission, 
+including the amount of data 
+transmission, network delay, 
+etc. 
+User 
+demand 
+data 
+ User request 
+quantity 
+ The number of tasks 
+submitted by users within a 
+certain period of time. 
+User type  
+For example, ordinary users, 
+VIP users, etc., the demand 
+and priority of resources may 
+be different. 
+Changes in 
+user   
+User demand that changes 
+over time, such as business 
+growth, new service launch, 
+etc. 
+Resource 
+allocation policy 
+data   
+Resource 
+partitioning 
+of virtual 
+machines 
+Resource allocation of virtual 
+machines in terms of CPU, 
+memory, storage, etc. 
+Load 
+balancing 
+algorithms 
+Such as polling algorithm, 
+weighted polling algorithm, 
+minimum number of 
+connections algorithm, etc. 
+ 
+Resource 
+scheduling 
+policy  
+Resource scheduling policy 
+designed according to 
+application requirements and 
+priorities. 
+Cost and benefit 
+data   
+Resource cost 
+Including hardware cost, 
+operation and maintenance 
+cost, etc. 
+Resource 
+benefits  
+Business growth, customer 
+satisfaction improvement, etc. 
+through resource allocation 
+Security 
+and 
+privacy 
+protection data  
+Resource 
+segregation 
+degree  
+Resource segregation between 
+different users 
+Permission 
+management 
+data  
+User's permission 
+management for accessing 
+resources 
+Encrypted 
+data 
+transmission  
+Encrypted protection of 
+resources during transmission 
+III. RANDOM FOREST ALGORITHM 
+A. Basic Concepts of Random Forests 
+Random Forest is an integrated learning algorithm that 
+consists of multiple decision trees. Each decision tree is 
+constructed by random sampling and feature selection on the 
+training data. When predicting, Random Forest obtains the 
+final prediction by voting or averaging the predictions of 
+multiple decision trees. In machine learning algorithms, 
+because Random Forest can not only deal with complex, 
+nonlinear and high dimensional problems, but also has a 
+strong generalization ability and robustness[3]. Compared to 
+other algorithms, Random Forest can better deal with 
+overfitting problems and is more tolerant to a large number 
+of input variables and data noise. Therefore, the random 
+forest algorithm is selected to analyze the influence of 
+machine influencing factors on cloud computing resource 
+allocation, in order to reveal the relationship of influencing 
+factors in cloud computing resource allocation more 
+accurately. 
+B. Random Forest Modeling 
+Random Forest (RF), as an integrated learning method, 
+has demonstrated excellent prediction and classification 
+capabilities in many domains. By constructing multiple 
+decision trees and synthesizing their results, Random Forest 
+is able to capture nonlinear relationships and complex 
+patterns in data. Its formulation results in: 
+                  h =
+1
+𝑇𝑇∑
+{ℎ(𝑥𝑥, 𝜃𝜃𝑡𝑡
+𝑇𝑇
+𝑡𝑡=1
+)}                        (1) 
+• Data Preprocessing: the data of this model is from the 
+API interface of cloud computing platform, log files, 
+and third-party research organizations. The dependent 
+variables are cloud computing resource allocation 
+utilization as well as allocation efficiency, and 8 
+characteristic variables are screened, which are 
+computing 
+resources, 
+memory 
+resources, 
+task 
+response time, user requests, user demand changes, 
+virtual machine resource division, resource cost and 
+data encrypted transmission. The dataset is divided 
+with the first 80% as the training set and the second 
+20% as the testing set[4]. 
+• Create the model: to create a random forest model, 
+use the TreeBagger function in MATLAB to create a 
+random forest model, specifying the number of trees 
+and the data set. After the random forest model is 
+created, the predict command can be used to predict 
+the new data and the oobError command can be used 
+to calculate the out-of-bag error, the flowchart is 
+shown in Figure 1. 
+ 
+Fig. 1. Schematic diagram of random forest 
+• Analysis of Importance Calculation: the feature 
+importance of Random Forest is calculated by the 
+built-in OOB Permuted Pr edictor DeltaError 
+property. This property calculates the Permutation 
+Feature Importance. 
+• The OOB Permuted Pr edictor DeltaError is 
+calculated by the following steps: first for each 
+feature, its value in the OOB sample is randomly 
+perturbed (i.e., displacing the feature value), and the 
+other features are kept unchanged. The difference 
+between the model's prediction error on the OOB 
+sample and the original prediction error is then 
+computed after upsetting a feature value. This 
+difference 
+measures 
+how 
+much 
+the 
+model's 
+performance decreases after upsetting a feature value, 
+and can therefore be considered as the importance of 
+that feature. Finally, the above steps are repeated to 
+displace all features to obtain the importance of each 
+feature. 
+• Specific steps: Original OOB Error (Original OOB 
+Error) calculation; first train the Random Forest 
+model using all the data and labels, and set oob_ 
+score = Ture. equation 1 calculates the Original OOB 
+Error OOBoriginal [5], which is usually used as the 
+Mean Square Error (MSE).Where 𝑦𝑦𝑖𝑖 is the true label 
+and 𝑦𝑦ො00𝑏𝑏,𝑡𝑡 is the OOB prediction. 
+949
+Authorized licensed use limited to: BRACT's Vishwakarma Institute Pune. Downloaded on March 04,2026 at 05:35:01 UTC from IEEE Xplore.  Restrictions apply. 
+                   OBBoriginal=
+1
+𝑁𝑁∑
+(𝑦𝑦𝑖𝑖−𝑦𝑦ො00𝑏𝑏,𝑡𝑡)
+𝑁𝑁
+𝑖𝑖=1
+²            (2) 
+• Secondly, the Permutation Feature Importance (PFI) 
+is calculated: in equation (2) for each feature f i.e., the 
+original feature data is copied. In the copied data, the 
+value of feature f is randomly disrupted. Retrain the 
+model using the data with the disrupted feature values. 
+Compute the new OOB error , OOBpermuted,f . Compute 
+the Delta Error ∆Errorf .Where the ∆Errorf value 
+indicates the importance of feature f; the larger the 
+value, the more important the feature. 
+∆Errorf=OOBpermuted,f−OBBoriginal                      (3) 
+C. Random Forest Model Importance Analysis 
+The Random Forest model constructed in the previous 
+paper is simulated, and the data set is divided, with the first 
+80% as the training set and the second 20% as the test set, 
+and the R2 of the data in the training set is calculated to be 
+0.9522; the R2 of the data in the test set is calculated to be 
+0.86157; the MAE of the data in the training set is 0.02025; 
+the MAE of the data in the test set is 0.031289; and the 
+RMSE of the data in the training set is calculated to be 
+0.038698; the RMSE of the data in the test set is 0.025317. 
+0.038698 for the training set data and 0.025317 for the test 
+set data, and the predictions are as expected. Finally the 
+importance calculation is able to represent the histogram of 
+the importance of the feature parameters, as shown in Figure 
+2. 
+ 
+Fig. 2. Influential histogram of characteristic parameters of cloud 
+computing resource utilization efficiency 
+Characteristic parameters 1-8 in the figure are 
+represented as computing resources, memory resources, task 
+response time, user request volume, user demand change, 
+virtual machine resource division, resource cost and data 
+encrypted transmission situation respectively. From Fig. 2, it 
+can be seen that the characteristic parameters of 1-4 and 8 
+have a greater impact on resource utilization, especially 1 
+and 2. Therefore, optimizing computing resources, memory 
+resources and data encrypted transmission can effectively 
+improve resource utilization and effectively optimize cloud 
+computing 
+resource 
+allocation[6]. 
+The 
+same 
+model 
+construction and parameter optimization methods are used to 
+analyze the influencing factors of resource allocation rate 
+and calculate the importance degree. 
+The data set is also divided, with the first 80% as the 
+training set and the second 20% as the test set. The results of 
+the resource allocation efficiency test set and the results of 
+the resource allocation efficiency training set were obtained, 
+and the R 2 of the training set data was calculated as 0.853; 
+the R 2 of the test set data was calculated as 0.8521; the 
+MAE of the training set data was 0.0213; the MAE of the test 
+set data was 0.0323; the RMSE of the training set data was 
+0.0376; and the RMSE of the test set data was 0.0262. The 
+predictions are in line with expectations. Finally the 
+importance calculation is able to represent the histogram of 
+the importance of the feature parameters, as shown in Figure 
+3.   
+ 
+Fig. 3. Influence histogram of parameters characterizing resource allocation 
+efficiency in cloud computing 
+Still the characteristic parameters in the figure are 
+represented as computational resources, memory resources, 
+task response time, user requests, user demand variation, 
+virtual machine resource partitioning, resource cost and data 
+encrypted transmission. From the figure, it can be seen that 
+memory resources have a greater impact on resource 
+allocation efficiency, followed by computational resources 
+and task response time. So optimizing computing resources, 
+memory resources and task response time can effectively 
+improve resource allocation efficiency and effectively affect 
+cloud computing resource allocation. 
+IV. RANDOM FOREST BASED RESOURCE ALLOCATION 
+OPTIMIZATION 
+After analyzing the influencing factors of cloud 
+computing resource allocation, the resource allocation 
+strategy is optimized using the random forest model. The 
+goal of the optimization is to maximize the utilization rate 
+and allocation efficiency of the resources under the premise 
+of satisfying the users' needs. 
+A. Optimization strategy 
+The resource allocation optimization strategy based on 
+the random forest model mainly includes the following 
+aspects: first, resource selection optimization: according to 
+the results of the feature importance assessment, priority is 
+given to allocating resources that have a greater impact on 
+resource allocation performance[7]. For example, in the case 
+of resource tension, priority can be given to allocating 
+resources with higher contribution to resource utilization and 
+allocation efficiency. Second, task scheduling optimization: 
+according to the resource demand and resource attribute 
+characteristics of the task, a reasonable task scheduling 
+strategy is formulated. For example, tasks with similar 
+resource requirements can be merged to reduce resource 
+wastage and conflicts; at the same time, tasks can also be 
+sorted according to priority to ensure that important tasks can 
+obtain resources on a priority basis. Third, parameter tuning: 
+the parameters of the resource allocation strategy are 
+0
+0.2
+0.4
+0.6
+1
+2
+3
+4
+5
+6
+7
+8
+Importance
+Feature
+0
+0.2
+0.4
+0.6
+0.8
+1
+1
+2
+3
+4
+5
+6
+7
+8
+Importance
+Feature
+950
+Authorized licensed use limited to: BRACT's Vishwakarma Institute Pune. Downloaded on March 04,2026 at 05:35:01 UTC from IEEE Xplore.  Restrictions apply. 
+optimized using the random forest model. For example, 
+parameters such as the number and maximum depth of 
+decision trees can be adjusted to improve the accuracy and 
+stability of the model; at the same time, the selection of 
+allocation algorithms and parameter settings can also be 
+adjusted 
+to 
+optimize 
+the 
+performance 
+of 
+resource 
+allocation[8]. 
+B. Experimental design and realization 
+In order to verify the effectiveness of the resource 
+allocation optimization method based on random forest, the 
+following experiments are designed. 
+1) Dataset Preparation: collect resource usage data and 
+task requirement data on the cloud computing platform as a 
+dataset for the experiment. The dataset should include 
+different types of resources (e.g., CPU, memory, storage, 
+etc.) and tasks (e.g., compute-intensive tasks, IO-intensive 
+tasks, etc.). 
+2) Model Training and Evaluation: the dataset is utilized 
+to construct a random forest model, and model training and 
+evaluation is performed. During the training process, we can 
+utilize methods such as cross-validation to evaluate the 
+performance of the model; at the same time, we can also 
+utilize the results of feature importance assessment to 
+identify the main features that affect the performance of 
+resource allocation. 
+3) Optimization strategy implementation: According to 
+the feature importance assessment results and optimization 
+strategy, the resource allocation strategy can be adjusted and 
+optimized. For example, priority can be given to allocating 
+resources that contribute more to resource utilization and 
+allocation efficiency; at the same time, task scheduling and 
+parameter settings can also be adjusted to optimize the 
+performance of resource allocation. 
+C. Experimental results and analysis 
+1) Resource Utilization Improvement: the formula of 
+resource utilization is: (Improved Resource Utilization - 
+Initial Resource Utilization/Initial Resource Utilization) × 
+100%, and Table II and III shows that after optimization, the 
+resource utilization of the cloud computing platform 
+improves as: ( 0.72-0.6/0.6 ) × 100% = 20%. This shows 
+that the optimization strategy can effectively improve the 
+utilization efficiency of resources and reduce the waste and 
+conflict of resources. 
+2) Improved resource allocation efficiency: resource 
+allocation efficiency is measured by utilizing the total task 
+completion time (T). The optimized resource allocation 
+strategy also shows significant improvement in terms of 
+allocation efficiency. As shown in Table II and III, the 
+percentage reduction in task completion time compared to 
+pre-optimization is: ( 2-1.7)/2 × 100% = 15%. This indicates 
+that the optimization strategy can speed up the allocation 
+and execution of tasks and improve the responsiveness and 
+service quality of the system, thus effectively improving the 
+resource allocation efficiency. 
+TABLE II.  PRE-OPTIMIZATION RESOURCE DATA 
+Resource Type Data Item 
+Numeric 
+Data item 
+Descriptive 
+CPU resources  
+Total input  
+1000 cores 
+Utilization rate  
+60% 
+Resource Type Data Item 
+Numeric 
+Data item 
+Descriptive 
+Memory resources   
+Total input 
+20TB 
+Utilization rate  
+50% 
+Storage space   
+ 
+ 
+Total input 
+100PB 
+Utilization rate  
+40% 
+Business 
+Transaction 
+Volume   
+Transactions 
+per 
+second 
+10000 
+transactions per 
+second 
+Service quality  
+ 
+ 
+Response time  
+Average 0.1 
+seconds 
+Error rate 0.01% 
+ 
+Task completion   
+Number of tasks 
+100 
+Average 
+completion 
+time 
+per task  
+2h 
+Total 
+task 
+completion time  
+200h 
+TABLE III.  OPTIMIZED RESOURCE DATA 
+Resource Type Data Item 
+Numeric 
+Data item 
+Descriptive 
+CPU resources  
+Total input  
+1000 cores 
+Utilization rate  
+72% 
+Memory resources   
+Total input 
+20TB 
+Utilization rate  
+60% 
+Storage space   
+Total input 
+100PB 
+Utilization rate  
+50% 
+Business 
+Transaction 
+Volume   
+Transactions 
+per 
+second 
+12000 
+transactions per 
+second 
+Service quality  
+Response time  
+Average 0.1 
+seconds 
+Error rate 0.01% 
+ 
+Task completion   
+Number of tasks 
+100 
+Average 
+completion 
+time 
+per task  
+2h 
+Total 
+task 
+completion time  
+200h 
+V. CONCLUSIONS AND OUTLOOK 
+A. Research summary 
+This paper deeply analyzes the influencing factors of 
+cloud computing resource allocation based on random forest 
+and proposes corresponding optimization strategies. By 
+studying various factors such as resource demand, task type 
+and user behavior in the cloud computing environment, a 
+random forest model is constructed to predict the resource 
+allocation demand in order to achieve more accurate resource 
+allocation. The experimental results show that the method 
+can significantly improve the efficiency and fairness of cloud 
+computing resource allocation, providing strong support for 
+the sustainable development of cloud computing. 
+B. Research Outlook 
+1) The random forest model is further optimized to 
+improve the performance and generalization ability of the 
+model. More advanced feature selection algorithms, model 
+optimization algorithms, etc. can be used to improve the 
+951
+Authorized licensed use limited to: BRACT's Vishwakarma Institute Pune. Downloaded on March 04,2026 at 05:35:01 UTC from IEEE Xplore.  Restrictions apply. 
+accuracy and efficiency of the model. 
+2) To combine other machine learning algorithms and
+optimization algorithms to build a more intelligent cloud 
+computing resource allocation system. Deep learning 
+algorithms, reinforcement learning algorithms, etc. can be 
+combined with random forest algorithms to improve the 
+intelligence of resource allocation. 
+3) More comprehensive cloud computing resource
+allocation model is constructed by considering more 
+influencing factors, such as energy consumption, cost-
+effectiveness and so on. Factors such as energy consumption 
+and cost-effectiveness can be included in the consideration 
+of resource allocation to realize the efficient use of 
+resources and sustainable development. 
+4) Research on the dynamics and real-time nature of
+cloud computing resource allocation should be strengthened 
+to improve the responsiveness and adaptability of resource 
+allocation. Real-time monitoring and forecasting techniques 
+can be adopted to achieve dynamic adjustment and 
+optimization of resource allocation. 
+REFERENCES 
+[1]
+D. Tharam, C. Wu, and E. Chang. "Cloud computing: issues and
+challenges." 2010 24th IEEE international conference on advanced
+information networking and applications. Ieee, 2010. 
+[2]
+S. Chaisiri, B.S. Lee, D. Niyato, Optimization of resource
+provisioning cost in cloud computing[J]. IEEE transactions on
+services Computing, 2011, 5(2): 164-177. 
+[3]
+Z. Cao, J. Lin, C. Wan, et al. Optimal cloud computing resource
+allocation for demand side management in smart grid[J]. IEEE
+Transactions on Smart Grid, 2016, 8(4): 1943-1955. 
+[4]
+T. Mehmood, S. Latif, S. Malik.  Prediction of cloud computing
+resource utilization[C]//2018 15th International Conference on Smart
+Cities: Improving Quality of Life Using ICT & IoT (HONET-ICT).
+IEEE, 2018: 38-42. 
+[5]
+R. Motwani. Randomized Algor ithms[M]. Cambridge University
+Press, 1995. 
+[6]
+F. Woolfe, E. Liberty, V. Rokhlin, et al. A fast randomized algorithm
+for the approximation of matrices[J]. Applied and Computational
+Harmonic Analysis, 2008, 25(3): 335-366. 
+[7]
+M. Dietzfelbinger, F. Hagerup, J. Katajainen, et al. A reliable
+randomized algorithm for the closest-pair problem[J]. Journal of
+Algorithms, 1997, 25(1): 19-51. 
+[8]
+A. Arcuri, L. Briand.  A hitchhiker's guide to statistical tests for
+assessing randomized algorithms in software engineering[J]. Software
+Testing, Verification and Reliability, 2014, 24(3): 219-250. 
+952
+Authorized licensed use limited to: BRACT's Vishwakarma Institute Pune. Downloaded on March 04,2026 at 05:35:01 UTC from IEEE Xplore.  Restrictions apply. 
