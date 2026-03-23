@@ -377,7 +377,7 @@ def generate_plots(all_metrics, alloc_results, rf_model, feature_names, ga_fitne
         ax.set_xticks(x)
         ax.set_xticklabels(models, fontsize=9)
         ax.legend(loc='lower right')
-        ax.set_ylim(80, 100)
+        ax.set_ylim(97, 99)
         ax.grid(axis='y', alpha=0.3)
 
         # Value labels on top
@@ -479,16 +479,17 @@ def generate_plots(all_metrics, alloc_results, rf_model, feature_names, ga_fitne
             ax.set_xlabel('Generation')
             ax.set_ylabel('Best Fitness (F1-Score)')
             ax.set_title('Genetic Algorithm Convergence for RF Hyperparameter Optimization')
+            ax.set_ylim(0.9, 1.0)
             ax.grid(alpha=0.3)
 
             # Annotate start and end
             ax.annotate(f'Start: {ga_fitness[0]:.4f}',
-                        xy=(1, ga_fitness[0]), xytext=(3, ga_fitness[0]-0.005),
+                        xy=(1, ga_fitness[0]), xytext=(3, ga_fitness[0]-0.003),
                         arrowprops=dict(arrowstyle='->', color='#777'),
                         fontsize=8, color='#555')
             ax.annotate(f'Converged: {ga_fitness[-1]:.4f}',
                         xy=(len(ga_fitness), ga_fitness[-1]),
-                        xytext=(len(ga_fitness)-5, ga_fitness[-1]+0.005),
+                        xytext=(len(ga_fitness)-5, ga_fitness[-1]+0.003),
                         arrowprops=dict(arrowstyle='->', color='#27ae60'),
                         fontsize=8, color='#27ae60', fontweight='bold')
 
@@ -679,7 +680,7 @@ def generate_plots(all_metrics, alloc_results, rf_model, feature_names, ga_fitne
         axes[0].set_xticks(x)
         axes[0].set_xticklabels(models_list, rotation=15, ha='right', fontsize=9)
         axes[0].legend()
-        axes[0].set_ylim(80, 100)
+        axes[0].set_ylim(97, 99)
         axes[0].grid(axis='y', alpha=0.3)
 
         sl = [r['strategy'] for r in alloc_results]
