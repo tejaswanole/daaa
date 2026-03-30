@@ -1,0 +1,7 @@
+Strategy,Avg Latency (ms),Utilization (%),Energy (kWh),SLA Violations (%)
+Round Robin,245.7,47.9,220.8,92.0
+Threshold-Based,177.9,98.9,220.2,26.6
+SVM-Based,134.4,98.8,221.1,0.9
+LSTM-Based,111.8,98.9,220.9,0.9
+Vanilla RF,128.0,99.0,220.6,0.9
+GA-RF (Proposed),97.8,99.0,220.5,0.9

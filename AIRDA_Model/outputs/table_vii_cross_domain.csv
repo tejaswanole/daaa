@@ -1,0 +1,5 @@
+Domain,Accuracy (%),Notes
+Cloud VM Scheduling,98.5,Primary domain (synthetic cloud trace)
+IoT Device Management,91.9,Scaled features for IoT profile
+Edge Computing,87.3,"Higher noise, constrained devices"
+HPC Job Scheduling,95.8,Batch workload characteristics

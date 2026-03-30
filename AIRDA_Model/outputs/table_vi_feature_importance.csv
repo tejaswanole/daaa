@@ -1,0 +1,11 @@
+Rank,Feature,Importance Score
+1,Task Queue Length,0.2611
+2,Disk Read I/O (MB/s),0.2131
+3,Network Egress (MB/s),0.162
+4,CPU Utilization (%),0.1429
+5,Memory Usage (%),0.0882
+6,Disk Write I/O (MB/s),0.0828
+7,Network Ingress (MB/s),0.0478
+8,ΔMemory (temporal trend),0.0009
+9,ΔCPU (temporal trend),0.0008
+10,Cluster Label,0.0004
